@@ -7,7 +7,7 @@ Construir um web app que se alimenta minuto a minuto das posições dos ônibus 
 1. Utilizar docker
 2. Na mesma tela da tabela, mostrar os ônibus da linha posicionados num mapa.
 
--Stack:
+- Stack:
 1. O backend deve ser desenvolvido utilizando FastAPI e o frontend deve ser desenvolvido utilizando React.
 2. Sugestão: Utilizar a biblioteca celery para a obtenção periódica dos dados e o alerta para o usuário
 

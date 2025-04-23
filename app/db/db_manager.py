@@ -65,3 +65,14 @@ class DBManager:
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             return None
+    
+    def fetch_one(self, query, params=None):
+        try:
+            if params:
+                self.cursor.execute(query, params)
+            else:
+                self.cursor.execute(query)
+            return self.cursor.fetchone()
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return None

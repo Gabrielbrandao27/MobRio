@@ -17,3 +17,7 @@ class UserCreate(BaseModel):
         except ValueError:
             raise ValueError("Time must be in HH:MM:SS format")
         return value
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

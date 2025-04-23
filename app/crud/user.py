@@ -5,32 +5,32 @@ class User:
     def __init__(self):
         self.db = DBManager()
 
-    def insert_user(self, payload):
+    def register_user(self, payload):
         try:
             sql = """
-                INSERT IGNORE INTO users (name, password, email, bus_line, bus_stop, open_time, close_time)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT IGNORE INTO users (name, password, email)
+                VALUES (%s, %s, %s)
             """
             self.db.execute_query(sql, (
                 payload["name"],
                 payload["password"],
-                payload["email"],
-                payload["bus_line"],
-                payload["bus_stop"],
-                payload["open_time"],
-                payload["close_time"]
+                payload["email"]
             ))
             return {"message": "User inserted successfully"}
         except Exception as e:
             return {"error": str(e)}
 
 
-    def fetch_user(self, user_id):
+    def login_user(self, payload):
         try:
             sql = """
-                SELECT * FROM users WHERE id = %s
+                SELECT * FROM users WHERE email = %s
             """
-            user = self.db.fetch_one(sql, (user_id,))
+            user = self.db.fetch_one(sql, (payload["email"],))
+            if not user:
+                return {"error": "Invalid email"}
+            if user["password"] != payload["password"]:
+                return {"error": "Invalid password"}
             return {"user": user}
         except Exception as e:
             return {"error": str(e)}

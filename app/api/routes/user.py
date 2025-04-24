@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.schemas.user import UserCreate, UserLogin
 from app.crud.user import User
+from app.core.security import create_access_token
+
 
 router = FastAPI()
 
@@ -8,9 +10,7 @@ router = FastAPI()
 def register_user_route(user: UserCreate):
     try:
         user_db = User()
-
         response = user_db.register_user(user)
-
         user_db.close()
 
         return response
@@ -21,11 +21,13 @@ def register_user_route(user: UserCreate):
 def login_user_route(user: UserLogin):
     try:
         user_db = User()
-
-        response = user_db.login_user(user)
-
+        fetched_user = user_db.login_user(user)
         user_db.close()
 
-        return response
+        token = create_access_token(
+            data={"sub": fetched_user["email"], "name": fetched_user["name"]}
+        )
+
+        return {"access_token": token, "token_type": "bearer"}
     except Exception as e:
         return {"error": str(e)}

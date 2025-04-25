@@ -27,7 +27,6 @@ class User:
                 SELECT * FROM users WHERE email = %s
             """
             query_user = self.db.fetch_one(sql, (user.email,))
-
             if not query_user:
                 return {"error": "Invalid email"}
             

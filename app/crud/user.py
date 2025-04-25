@@ -5,33 +5,40 @@ class User:
     def __init__(self):
         self.db = DBManager()
 
-    def insert_user(self, payload):
+    def register_user(self, user):
         try:
             sql = """
-                INSERT IGNORE INTO users (name, password, email, bus_line, bus_stop, open_time, close_time)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT IGNORE INTO users (name, password, email)
+                VALUES (%s, %s, %s)
             """
             self.db.execute_query(sql, (
-                payload["name"],
-                payload["password"],
-                payload["email"],
-                payload["bus_line"],
-                payload["bus_stop"],
-                payload["open_time"],
-                payload["close_time"]
+                user.name,
+                user.password,
+                user.email
             ))
             return {"message": "User inserted successfully"}
         except Exception as e:
             return {"error": str(e)}
 
 
-    def fetch_user(self, user_id):
+    def login_user(self, user):
         try:
             sql = """
-                SELECT * FROM users WHERE id = %s
+                SELECT * FROM users WHERE email = %s
             """
-            user = self.db.fetch_one(sql, (user_id,))
-            return {"user": user}
+            query_user = self.db.fetch_one(sql, (user.email,))
+            if not query_user:
+                return {"error": "Invalid email"}
+            
+            obj_user = {
+                "name": query_user[1],
+                "password": query_user[2],
+                "email": query_user[3]
+            }
+
+            if obj_user["password"] != user.password:
+                return {"error": "Invalid password"}
+            return obj_user
         except Exception as e:
             return {"error": str(e)}
     
@@ -47,13 +54,20 @@ class User:
             return {"error": str(e)}
     
 
-    def delete_user(self, payload):
+    def delete_user(self, user):
         try:
             sql = """
                 DELETE FROM users WHERE email = %s
             """
-            self.db.execute_query(sql, (payload["email"],))
+            self.db.execute_query(sql, (user.email,))
             return {"message": "User deleted successfully"}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def drop_table(self, table_name):
+        try:
+            self.db.drop_table(table_name)
+            return {"message": f"Table {table_name} dropped successfully"}
         except Exception as e:
             return {"error": str(e)}
 

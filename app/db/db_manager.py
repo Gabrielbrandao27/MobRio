@@ -22,11 +22,20 @@ class DBManager:
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL UNIQUE,
+                email VARCHAR(255) NOT NULL UNIQUE
+            )
+        """)
+        self.connection.commit()
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS user_bus_relation (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
                 bus_line VARCHAR(255) NOT NULL,
                 bus_stop VARCHAR(255) NOT NULL,
                 open_time TIME NOT NULL,
-                close_time TIME NOT NULL
+                close_time TIME NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
         self.connection.commit()
@@ -76,3 +85,11 @@ class DBManager:
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             return None
+
+    def drop_table(self, table_name):
+        try:
+            self.cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+            self.connection.commit()
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            self.connection.rollback()

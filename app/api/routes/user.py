@@ -31,3 +31,14 @@ def login_user_route(user: UserLogin):
         return {"access_token": token, "token_type": "bearer"}
     except Exception as e:
         return {"error": str(e)}
+
+@router.delete("/drop_table/{table_name}")
+def drop_table_route(table_name: str):
+    try:
+        user_db = User()
+        response = user_db.drop_table(table_name)
+        user_db.close()
+
+        return response
+    except Exception as e:
+        return {"error": str(e)}

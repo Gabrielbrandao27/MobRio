@@ -2,8 +2,15 @@ from pydantic import BaseModel, EmailStr, field_validator
 
 class UserCreate(BaseModel):
     name: str
+    password: str
+    email: EmailStr
+
+class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class UserBusRelation(BaseModel):
+    user_id: int
     bus_line: str
     bus_stop: str
     open_time: str
@@ -17,7 +24,3 @@ class UserCreate(BaseModel):
         except ValueError:
             raise ValueError("Time must be in HH:MM:SS format")
         return value
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str

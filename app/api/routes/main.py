@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Depends
+from fastapi import APIRouter, Depends
 from app.dependencies.auth import get_current_user
 
-router = FastAPI()
+router = APIRouter()
 
 @router.get("/")
 def landing_page():

@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from app.schemas.user import UserCreate, UserLogin
 from app.crud.user import User
 from app.core.security import create_access_token
 
 
-router = FastAPI()
+router = APIRouter()
 
 @router.post("/register")
 def register_user_route(user: UserCreate):

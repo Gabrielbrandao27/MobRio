@@ -15,4 +15,4 @@ def landing_page():
 
 @router.get("/home")
 def home(current_user: dict = Depends(get_current_user)):
-    return {"message": f"Bem-vindo de volta, {current_user['name']}!"}
+    return {"message": f"Bem-vindo(a) de volta, {current_user['name']}!"}

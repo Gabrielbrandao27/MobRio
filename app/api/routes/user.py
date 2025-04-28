@@ -24,7 +24,6 @@ def login_user_route(user: UserLogin):
     try:
         user_db = User()
         fetched_user = user_db.login_user(user)
-        print(fetched_user)
         user_db.close()
 
         if "error" in fetched_user:

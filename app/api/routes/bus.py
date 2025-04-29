@@ -1,11 +1,11 @@
-import os
 from fastapi import APIRouter, Depends
 from app.crud.bus import Bus
+from app.dependencies.auth import get_current_user
 
 router = APIRouter()
 
 @router.get("/bus/routes")
-def get_routes():
+def get_routes(_: dict = Depends(get_current_user)):
     try:
         bus_db = Bus()
         bus_lines = bus_db.fetch_routes()
@@ -15,7 +15,7 @@ def get_routes():
         return {"error": str(e)}
 
 @router.get("/bus/stops/{route_id}")
-def get_stops(route_id: int):
+def get_stops(route_id: int, _: dict = Depends(get_current_user)):
     try:
         bus_db = Bus()
         bus_stops = bus_db.fetch_stops(route_id)

@@ -15,6 +15,15 @@ class DBManager:
         if not DBManager.seeded:
             self.seed_database()
             DBManager.seeded = True
+    
+    def get_connection(self):
+        return mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE"),
+            port=int(os.getenv("MYSQL_PORT", 3306)),
+        )
 
     def seed_database(self):
         # Create a table if it doesn't exist
@@ -95,15 +104,6 @@ class DBManager:
             insert_route_stops(self)
 
         self.connection.commit()
-
-    def get_connection(self):
-        return mysql.connector.connect(
-            host=os.getenv("MYSQL_HOST"),
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD"),
-            database=os.getenv("MYSQL_DATABASE"),
-            port=int(os.getenv("MYSQL_PORT", 3306)),
-        )
 
     def close(self):
         self.cursor.close()

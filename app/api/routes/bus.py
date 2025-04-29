@@ -1,0 +1,25 @@
+import os
+from fastapi import APIRouter, Depends
+from app.crud.bus import Bus
+
+router = APIRouter()
+
+@router.get("/bus/routes")
+def get_routes():
+    try:
+        bus_db = Bus()
+        bus_lines = bus_db.fetch_routes()
+        bus_db.close()
+        return bus_lines
+    except Exception as e:
+        return {"error": str(e)}
+
+@router.get("/bus/stops/{route_id}")
+def get_stops(route_id: int):
+    try:
+        bus_db = Bus()
+        bus_stops = bus_db.fetch_stops(route_id)
+        bus_db.close()
+        return bus_stops
+    except Exception as e:
+        return {"error": str(e)}

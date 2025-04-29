@@ -11,8 +11,7 @@ class UserLogin(BaseModel):
 
 class UserBusRelation(BaseModel):
     user_id: int
-    bus_line: str
-    bus_stop: str
+    route_stop_id: str
     open_time: str
     close_time: str
 

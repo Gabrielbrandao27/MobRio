@@ -46,9 +46,10 @@ class DBManager:
 
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS route_stops (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                route_stop_id INT AUTO_INCREMENT PRIMARY KEY,
                 route_id VARCHAR(20) NOT NULL,
                 stop_id VARCHAR(20) NOT NULL,
+                stop_sequence INT NOT NULL,
                 FOREIGN KEY (route_id) REFERENCES routes(route_id),
                 FOREIGN KEY (stop_id) REFERENCES stops(stop_id)
             )
@@ -62,7 +63,7 @@ class DBManager:
                 open_time TIME NOT NULL,
                 close_time TIME NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (route_stop_id) REFERENCES route_stops(id)
+                FOREIGN KEY (route_stop_id) REFERENCES route_stops(route_stop_id)
             )
         """)
 

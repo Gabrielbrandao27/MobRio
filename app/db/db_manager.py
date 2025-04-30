@@ -1,6 +1,7 @@
 import os
 import mysql.connector
 from dotenv import load_dotenv
+from .insert_bus_data import insert_routes, insert_stops, insert_route_stops
 
 load_dotenv()
 
@@ -14,6 +15,15 @@ class DBManager:
         if not DBManager.seeded:
             self.seed_database()
             DBManager.seeded = True
+    
+    def get_connection(self):
+        return mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE"),
+            port=int(os.getenv("MYSQL_PORT", 3306)),
+        )
 
     def seed_database(self):
         # Create a table if it doesn't exist
@@ -25,29 +35,76 @@ class DBManager:
                 email VARCHAR(255) NOT NULL UNIQUE
             )
         """)
-        self.connection.commit()
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS routes (
+                route_id VARCHAR(20) NOT NULL PRIMARY KEY,
+                route_short_name VARCHAR(20) NOT NULL,
+                route_long_name VARCHAR(255) NOT NULL
+            )
+        """)
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS stops (
+                stop_id VARCHAR(20) NOT NULL PRIMARY KEY,
+                stop_name VARCHAR(255) NOT NULL,
+                stop_lat DECIMAL(9, 6) NOT NULL,
+                stop_lon DECIMAL(9, 6) NOT NULL
+            )
+        """)
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS route_stops (
+                route_stop_id INT AUTO_INCREMENT PRIMARY KEY,
+                route_id VARCHAR(20) NOT NULL,
+                stop_id VARCHAR(20) NOT NULL,
+                stop_sequence INT NOT NULL,
+                direction_id TINYINT NOT NULL,
+                FOREIGN KEY (route_id) REFERENCES routes(route_id),
+                FOREIGN KEY (stop_id) REFERENCES stops(stop_id)
+            )
+        """)
 
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS user_bus_relation (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
-                bus_line VARCHAR(255) NOT NULL,
-                bus_stop VARCHAR(255) NOT NULL,
+                route_stop_id INT NOT NULL,
                 open_time TIME NOT NULL,
                 close_time TIME NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users(id)
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (route_stop_id) REFERENCES route_stops(route_stop_id)
             )
         """)
-        self.connection.commit()
 
-    def get_connection(self):
-        return mysql.connector.connect(
-            host=os.getenv("MYSQL_HOST"),
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD"),
-            database=os.getenv("MYSQL_DATABASE"),
-            port=int(os.getenv("MYSQL_PORT", 3306)),
-        )
+        routes_result = self.fetch_one("SELECT COUNT(*) as total FROM routes")
+        if routes_result:
+            routes_total = routes_result[0]
+        else:
+            routes_total = 0
+
+        if routes_total == 0:
+            insert_routes(self)
+        
+        stops_result = self.fetch_one("SELECT COUNT(*) as total FROM stops")
+        if stops_result:
+            stops_total = stops_result[0]
+        else:
+            stops_total = 0
+
+        if stops_total == 0:
+            insert_stops(self)
+        
+        route_stops_result = self.fetch_one("SELECT COUNT(*) as total FROM route_stops")
+        if route_stops_result:
+            route_stops_total = route_stops_result[0]
+        else:
+            route_stops_total = 0
+
+        if route_stops_total == 0:
+            insert_route_stops(self)
+
+        self.connection.commit()
 
     def close(self):
         self.cursor.close()
@@ -63,6 +120,11 @@ class DBManager:
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             self.connection.rollback()
+    
+    def execute_many(self, query, data):
+        with self.connection.cursor() as cursor:
+            cursor.executemany(query, data)
+        self.connection.commit()
 
     def fetch_all(self, query, params=None):
         try:

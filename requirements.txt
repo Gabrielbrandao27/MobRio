@@ -2,3 +2,5 @@ fastapi[standard]
 mysql-connector-python
 python-dotenv
 python-jose[cryptography]
+requests
+pandas

@@ -31,6 +31,7 @@ class User:
                 return {"error": "Invalid email"}
             
             obj_user = {
+                "id": query_user[0],
                 "name": query_user[1],
                 "password": query_user[2],
                 "email": query_user[3]
@@ -61,6 +62,22 @@ class User:
             """
             self.db.execute_query(sql, (user.email,))
             return {"message": "User deleted successfully"}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def create_user_bus_relation(self, user, user_bus_relation):
+        try:
+            sql = """
+                INSERT IGNORE INTO user_bus_relation (user_id, route_stop_id, open_time, close_time)
+                VALUES (%s, %s, %s, %s)
+            """
+            self.db.execute_query(sql, (
+                user,
+                user_bus_relation.route_stop_id,
+                user_bus_relation.open_time,
+                user_bus_relation.close_time
+            ))
+            return {"message": "User bus relation created successfully"}
         except Exception as e:
             return {"error": str(e)}
     

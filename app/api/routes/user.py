@@ -1,9 +1,9 @@
 import os
 from fastapi import APIRouter, Depends
-from app.schemas.user import UserCreate, UserLogin
+from app.schemas.user import UserCreate, UserLogin, UserBusRelation
 from app.crud.user import User
 from app.core.security import create_access_token
-from app.dependencies.auth import admin_required
+from app.dependencies.auth import admin_required, get_current_user
 
 
 router = APIRouter()
@@ -24,7 +24,6 @@ def login_user_route(user: UserLogin):
     try:
         user_db = User()
         fetched_user = user_db.login_user(user)
-        print(fetched_user)
         user_db.close()
 
         if "error" in fetched_user:
@@ -36,11 +35,22 @@ def login_user_route(user: UserLogin):
             fetched_user["role"] = "user"
 
         token = create_access_token(
-            data={"sub": fetched_user["email"], "name": fetched_user["name"], "role": fetched_user["role"]},
+            data={"id": fetched_user["id"], "sub": fetched_user["email"], "name": fetched_user["name"], "role": fetched_user["role"]},
             expires_delta=None
         )
 
         return {"access_token": token, "token_type": "bearer"}
+    except Exception as e:
+        return {"error": str(e)}
+
+@router.post("/user_bus_relation")
+def create_user_bus_relation_route(user_bus_relation: UserBusRelation, user: dict = Depends(get_current_user)):
+    try:
+        user_db = User()
+        response = user_db.create_user_bus_relation(user["id"], user_bus_relation)
+        user_db.close()
+
+        return response
     except Exception as e:
         return {"error": str(e)}
 

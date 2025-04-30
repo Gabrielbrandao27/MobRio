@@ -1,10 +1,12 @@
-from datetime import datetime, timedelta
 import requests
+from datetime import datetime, timedelta
+from celery_worker import celery_app
 
+@celery_app.task
 def fetch_todays_buses():
     now = datetime.now()
-    open_time = (now - timedelta(hours=1)).strftime("%Y-%m-%d+%H:%M:%S")
-    close_time = now.strftime("%Y-%m-%d+%H:%M:%S")
+    open_time = now.strftime("%Y-%m-%d+%H:%M:%S")
+    close_time = (now + timedelta(minutes=1)).strftime("%Y-%m-%d+%H:%M:%S")
 
     url = f"https://dados.mobilidade.rio/gps/sppo?dataInicial={open_time}&dataFinal={close_time}"
 

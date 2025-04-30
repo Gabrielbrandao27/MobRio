@@ -59,6 +59,7 @@ class DBManager:
                 route_id VARCHAR(20) NOT NULL,
                 stop_id VARCHAR(20) NOT NULL,
                 stop_sequence INT NOT NULL,
+                direction_id TINYINT NOT NULL,
                 FOREIGN KEY (route_id) REFERENCES routes(route_id),
                 FOREIGN KEY (stop_id) REFERENCES stops(stop_id)
             )

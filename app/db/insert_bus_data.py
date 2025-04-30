@@ -34,8 +34,8 @@ def insert_stops(db):
 
 def insert_route_stops(db):
     route_stops_df = pd.read_csv(fetch_paths("route_stops"))
-    query = "INSERT IGNORE INTO route_stops (route_id, stop_id, stop_sequence) VALUES (%s, %s, %s)"
-    data = [(row['route_id'], row['stop_id'], row['stop_sequence']) for _, row in route_stops_df.iterrows()]
+    query = "INSERT IGNORE INTO route_stops (route_id, stop_id, stop_sequence, direction_id) VALUES (%s, %s, %s, %s)"
+    data = [(row['route_id'], row['stop_id'], row['stop_sequence'], row['direction_id']) for _, row in route_stops_df.iterrows()]
 
     # Dividir os dados em batches
     batch_size = 1000

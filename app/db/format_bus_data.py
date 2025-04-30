@@ -19,7 +19,7 @@ def load_gtfs_data():
 
     # Selecionar colunas úteis
     routes = routes[['route_id', 'route_short_name', 'route_long_name']]
-    trips = trips[['route_id', 'trip_id']]
+    trips = trips[['route_id', 'trip_id', 'direction_id']]
     stop_times = stop_times[['trip_id', 'stop_id', 'stop_sequence']]
     stops = stops[['stop_id', 'stop_name', 'stop_lat', 'stop_lon']]
 
@@ -34,7 +34,7 @@ def load_gtfs_data():
     trip_stop = pd.merge(trip_stop, stops, on='stop_id')
 
     # Agora temos stop_id, route_id e route_long_name juntos
-    route_stops = trip_stop[['route_id', 'stop_id', 'stop_sequence']].drop_duplicates()
+    route_stops = trip_stop[['route_id', 'stop_id', 'stop_sequence', 'direction_id']].drop_duplicates()
     trip_stop = trip_stop[['stop_id', 'stop_name', 'stop_lat', 'stop_lon']]
 
     # Depois de montar os DataFrames finais

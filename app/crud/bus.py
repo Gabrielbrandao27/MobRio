@@ -15,24 +15,27 @@ class Bus:
         except Exception as e:
             return {"error": str(e)}
     
-    def fetch_stops(self, route_id):
+    def fetch_stops(self, route_id, direction_id):
         try:
             sql = """
-                SELECT * FROM route_stops WHERE route_id = %s
+                SELECT 
+                    rs.route_stop_id AS route_stop_id,
+                    s.stop_id,
+                    s.stop_name,
+                    s.stop_lat,
+                    s.stop_lon,
+                    rs.stop_sequence
+                FROM route_stops rs
+                JOIN stops s ON rs.stop_id = s.stop_id
+                WHERE rs.route_id = %s
+                AND rs.direction_id = %s
+                ORDER BY rs.stop_sequence
             """
-            stops = self.db.fetch_all(sql, (route_id,))
-            stop_ids = [stop[2] for stop in stops]
-
-            if not stop_ids:
-                return {"stops": []}
-
-            sql = """
-                SELECT * FROM stops WHERE stop_id IN (%s)
-            """ % ','.join(['%s'] * len(stop_ids))
-            stops = self.db.fetch_all(sql, stop_ids)
+            stops = self.db.fetch_all(sql, (route_id, direction_id))
             return {"stops": stops}
         except Exception as e:
             return {"error": str(e)}
+
     
     def close(self):
         self.db.close()

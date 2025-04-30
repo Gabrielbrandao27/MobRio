@@ -10,7 +10,6 @@ class UserLogin(BaseModel):
     password: str
 
 class UserBusRelation(BaseModel):
-    user_id: int
     route_stop_id: str
     open_time: str
     close_time: str

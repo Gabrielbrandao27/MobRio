@@ -14,11 +14,11 @@ def get_routes(_: dict = Depends(get_current_user)):
     except Exception as e:
         return {"error": str(e)}
 
-@router.get("/bus/stops/{route_id}")
-def get_stops(route_id: int, _: dict = Depends(get_current_user)):
+@router.get("/bus/stops")
+def get_stops(route_id: str, direction_id: int, _: dict = Depends(get_current_user)):
     try:
         bus_db = Bus()
-        bus_stops = bus_db.fetch_stops(route_id)
+        bus_stops = bus_db.fetch_stops(route_id, direction_id)
         bus_db.close()
         return bus_stops
     except Exception as e:

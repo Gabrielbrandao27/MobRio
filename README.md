@@ -1,4 +1,4 @@
-# desafio_tecnico_maravi
+# Desafio Técnico Maravi
 
 ## Proposta:
 Construir um web app que se alimenta minuto a minuto das posições dos ônibus do Rio de Janeiro, permita que o usuário cadastre um ônibus, ponto e janela de horário de partida e a partir desse cadastro gere um e-mail de notificação para o usuário sempre que algum ônibus dessa linha esteja a 10 minutos de chegar nessa localização dentro da faixa de horário estabelecida. Além disso, o aplicativo deve ter uma tela que mostra uma tabela de todos os ônibus da linha selecionada, sua velocidade e tempo até o local de partida do usuário.

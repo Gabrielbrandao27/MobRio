@@ -10,9 +10,9 @@ celery_app = Celery(
 celery_app.conf.beat_schedule = {
     'fetch-bus-data-every-minute': {
         'task': 'celery_tasks.fetch_bus_data',
-        'schedule': timedelta(minutes=1),  # Executa a cada 1 minuto
+        'schedule': timedelta(minutes=1)
     },
 }
 
 # Importa as tasks para que o worker conheça
-import celery_tasks
+import app.tasks.celery_tasks as celery_tasks

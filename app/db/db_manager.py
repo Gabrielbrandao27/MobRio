@@ -10,7 +10,7 @@ class DBManager:
 
     def __init__(self):
         self.connection = self.get_connection()
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(dictionary=True)
 
         if not DBManager.seeded:
             self.seed_database()
@@ -79,7 +79,7 @@ class DBManager:
 
         routes_result = self.fetch_one("SELECT COUNT(*) as total FROM routes")
         if routes_result:
-            routes_total = routes_result[0]
+            routes_total = routes_result["total"]
         else:
             routes_total = 0
 
@@ -88,7 +88,7 @@ class DBManager:
         
         stops_result = self.fetch_one("SELECT COUNT(*) as total FROM stops")
         if stops_result:
-            stops_total = stops_result[0]
+            stops_total = stops_result["total"]
         else:
             stops_total = 0
 
@@ -97,7 +97,7 @@ class DBManager:
         
         route_stops_result = self.fetch_one("SELECT COUNT(*) as total FROM route_stops")
         if route_stops_result:
-            route_stops_total = route_stops_result[0]
+            route_stops_total = route_stops_result["total"]
         else:
             route_stops_total = 0
 

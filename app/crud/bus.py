@@ -35,7 +35,35 @@ class Bus:
             return {"stops": stops}
         except Exception as e:
             return {"error": str(e)}
-
     
+    def fetch_user_bus_relations(self, user_id):
+        try:
+            sql = """
+                SELECT 
+                    ub.user_id,
+                    r.route_short_name,
+                    JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'route_stop_id', ub.route_stop_id,
+                            'open_time', ub.open_time,
+                            'close_time', ub.close_time,
+                            'stop_id', rs.stop_id,
+                            'stop_name', s.stop_name,
+                            'stop_lat', s.stop_lat,
+                            'stop_lon', s.stop_lon
+                        )
+                    ) AS relations
+                FROM user_bus_relation ub
+                JOIN route_stops rs ON ub.route_stop_id = rs.route_stop_id
+                JOIN stops s ON rs.stop_id = s.stop_id
+                JOIN routes r ON rs.route_id = r.route_id
+                WHERE ub.user_id = %s
+                GROUP BY ub.user_id, r.route_short_name;
+            """
+            result = self.db.fetch_all(sql, (user_id,))
+            return result
+        except Exception as e:
+            return {"error": str(e)}
+
     def close(self):
         self.db.close()

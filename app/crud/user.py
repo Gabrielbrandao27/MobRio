@@ -29,17 +29,10 @@ class User:
             query_user = self.db.fetch_one(sql, (user.email,))
             if not query_user:
                 return {"error": "Invalid email"}
-            
-            obj_user = {
-                "id": query_user[0],
-                "name": query_user[1],
-                "password": query_user[2],
-                "email": query_user[3]
-            }
 
-            if obj_user["password"] != user.password:
+            if query_user["password"] != user.password:
                 return {"error": "Invalid password"}
-            return obj_user
+            return query_user
         except Exception as e:
             return {"error": str(e)}
     

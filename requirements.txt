@@ -4,3 +4,5 @@ python-dotenv
 python-jose[cryptography]
 requests
 pandas
+celery
+redis

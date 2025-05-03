@@ -5,6 +5,11 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     Calcula a distância em metros entre dois pontos usando a fórmula de Haversine.
     """
     R = 6371000  # raio da Terra em metros
+    lat1 = float(lat1)
+    lon1 = float(lon1)
+    lat2 = float(lat2)
+    lon2 = float(lon2)
+
     phi1 = math.radians(lat1)
     phi2 = math.radians(lat2)
     delta_phi = math.radians(lat2 - lat1)

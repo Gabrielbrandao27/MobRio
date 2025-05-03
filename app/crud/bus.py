@@ -41,7 +41,7 @@ class Bus:
             sql = """
                 SELECT 
                     ub.user_id,
-                    r.route_name,
+                    r.route_short_name,
                     JSON_ARRAYAGG(
                         JSON_OBJECT(
                             'route_stop_id', ub.route_stop_id,
@@ -58,7 +58,7 @@ class Bus:
                 JOIN stops s ON rs.stop_id = s.stop_id
                 JOIN routes r ON rs.route_id = r.route_id
                 WHERE ub.user_id = %s
-                GROUP BY ub.user_id, r.route_name;
+                GROUP BY ub.user_id, r.route_short_name;
             """
             result = self.db.fetch_all(sql, (user_id,))
             return result

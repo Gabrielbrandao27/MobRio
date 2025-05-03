@@ -24,7 +24,13 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
 
 volumes:
   mysql_data:
   rabbitmq_data:
+  reddis_data:

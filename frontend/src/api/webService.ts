@@ -53,32 +53,9 @@ export const loginPage = async (email: string, password: string) => {
   }
 };
 
-export const userBusRelation = async (
-  routeStopId: number,
-  openTime: string,
-  closeTime: string
-) => {
-  try {
-    const payload = {
-      routeStopId,
-      openTime,
-      closeTime,
-    };
-    const response = await axiosInstance.post(`/user_bus_relation`, payload, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error posting user bus relation:", error);
-    throw error;
-  }
-};
-
 export const busRoutes = async () => {
   try {
-    const response = await axiosInstance.post(`/bus/routes`, {
+    const response = await axiosInstance.get(`/bus/routes`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -90,7 +67,7 @@ export const busRoutes = async () => {
   }
 };
 
-export const busStops = async (routeId: string, directionId: string) => {
+export const busStops = async (routeId: string, directionId: number) => {
   try {
     const response = await axiosInstance.get(
       `/bus/stops?route_id=${routeId}&direction_id=${directionId}`,
@@ -103,6 +80,29 @@ export const busStops = async (routeId: string, directionId: string) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching bus stops:", error);
+    throw error;
+  }
+};
+
+export const userBusRelation = async (
+  routeStopId: string,
+  openTime: string,
+  closeTime: string
+) => {
+  try {
+    const payload = {
+      route_stop_id: routeStopId,
+      open_time: openTime,
+      close_time: closeTime,
+    };
+    const response = await axiosInstance.post(`/user_bus_relation`, payload, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error posting user bus relation:", error);
     throw error;
   }
 };

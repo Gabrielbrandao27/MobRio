@@ -46,7 +46,6 @@ export const loginPage = async (email: string, password: string) => {
       password,
     };
     const response = await axiosInstance.post(`/login`, payload);
-    localStorage.setItem("token", response.data.access_token);
     return response.data;
   } catch (error) {
     console.error("Error on landing page:", error);

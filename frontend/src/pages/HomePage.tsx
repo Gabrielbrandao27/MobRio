@@ -1,116 +1,63 @@
-import { useState } from 'react';
-import { busRoutes, busStops, userBusRelation } from '../api/webService';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { busLivePositions } from '../api/webService';
 
-function HomePage() {
-  const [routes, setRoutes] = useState([]);
-  const [selectedRoute, setSelectedRoute] = useState('');
-  const [stops, setStops] = useState([]);
-  const [selectedStop, setSelectedStop] = useState('');
-  const [openTime, setOpenTime] = useState('');
-  const [closeTime, setCloseTime] = useState('');
+function LivePosition() {
+  const [positions, setPositions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleLoadRoutes = async () => {
+  const fetchPositions = async () => {
     try {
-      const response = await busRoutes();
-      setRoutes(response.lines);
+      const response = await busLivePositions();
+      setPositions(response.live_positions);
+      setLoading(false);
     } catch (error) {
-      console.error('Erro ao buscar rotas:', error);
+      console.error('Erro ao buscar posições ao vivo:', error);
     }
   };
 
-  const handleLoadStops = async () => {
-    if (!selectedRoute) {
-      alert('Selecione uma linha primeiro!');
-      return;
-    }
-    try {
-      const response = await busStops(selectedRoute, 0);
-      setStops(response.stops);
-    } catch (error) {
-      console.error('Erro ao buscar paradas:', error);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const formattedOpenTime = `${openTime}:00`;
-      const formattedCloseTime = `${closeTime}:00`;
-      await userBusRelation(selectedStop, formattedOpenTime, formattedCloseTime);
-      alert('Relação salva com sucesso!');
-    } catch (error) {
-      alert('Erro ao salvar relação.');
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    fetchPositions();
+    const interval = setInterval(fetchPositions, 60_000); // a cada 1 min
+    return () => clearInterval(interval); // limpa no unmount
+  }, []);
 
   return (
-    <div className="form-container">
-      <h2>Configuração do Monitoramento</h2>
+    <div className="live-position-container">
+      <h3>
+        Cadastrar linhas de ônibus? Vá para{' '}
+        <Link to="/route-stop-register">Cadastro de Ônibus</Link>
+      </h3>
 
-      <button type="button" onClick={handleLoadRoutes}>
-        Carregar Linhas
-      </button>
-
-      {routes.length > 0 && (
-        <>
-          <label>Escolha a linha:</label>
-          <select
-            value={selectedRoute}
-            onChange={(e) => setSelectedRoute(e.target.value)}
-            required
-          >
-            <option value="">Selecione</option>
-            {routes.map((route: any) => (
-              <option key={route.route_id} value={route.route_id}>
-                {route.route_short_name} - {route.route_long_name}
-              </option>
+      <h2>Posições ao Vivo</h2>
+      {loading ? (
+        <p>Carregando...</p>
+      ) : positions.length === 0 ? (
+        <p>Nenhum dado disponível.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Linha</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Velocidade (km/h)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {positions.map((pos, index) => (
+              <tr key={index}>
+                <td>{pos.route_name}</td>
+                <td>{pos.latitude}</td>
+                <td>{pos.longitude}</td>
+                <td>{pos.velocity}</td>
+              </tr>
             ))}
-          </select>
-
-          <button type="button" onClick={handleLoadStops}>
-            Carregar Paradas da Linha
-          </button>
-        </>
-      )}
-
-      {stops.length > 0 && (
-        <form onSubmit={handleSubmit}>
-          <label>Escolha o ponto:</label>
-          <select
-            value={selectedStop}
-            onChange={(e) => setSelectedStop(e.target.value)}
-            required
-          >
-            <option value="">Selecione</option>
-            {stops.map((stop: any) => (
-              <option key={stop.route_stop_id} value={stop.route_stop_id}>
-                {stop.stop_name}
-              </option>
-            ))}
-          </select>
-
-          <label>Horário de abertura:</label>
-          <input
-            type="time"
-            value={openTime}
-            onChange={(e) => setOpenTime(e.target.value)}
-            required
-          />
-
-          <label>Horário de fechamento:</label>
-          <input
-            type="time"
-            value={closeTime}
-            onChange={(e) => setCloseTime(e.target.value)}
-            required
-          />
-
-          <button type="submit">Enviar</button>
-        </form>
+          </tbody>
+        </table>
       )}
     </div>
   );
 }
 
-export default HomePage;
+export default LivePosition;

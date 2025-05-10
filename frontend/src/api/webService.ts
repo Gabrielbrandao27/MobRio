@@ -109,7 +109,7 @@ export const userBusRelation = async (
 
 export const busLivePositions = async () => {
   try {
-    const response = await axiosInstance.post(`/bus/live_positions`, {
+    const response = await axiosInstance.get(`/bus/live_positions`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

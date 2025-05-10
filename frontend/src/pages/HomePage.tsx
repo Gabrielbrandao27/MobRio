@@ -35,13 +35,14 @@ function LivePosition() {
       ) : positions.length === 0 ? (
         <p>Nenhum dado disponível.</p>
       ) : (
-        <table>
+        <table className="bus-table">
           <thead>
             <tr>
               <th>Linha</th>
               <th>Latitude</th>
               <th>Longitude</th>
               <th>Velocidade (km/h)</th>
+              <th>Tempo Chegada</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +52,7 @@ function LivePosition() {
                 <td>{pos.latitude}</td>
                 <td>{pos.longitude}</td>
                 <td>{pos.velocity}</td>
+                <td>{pos.tempo_chegada}</td>
               </tr>
             ))}
           </tbody>

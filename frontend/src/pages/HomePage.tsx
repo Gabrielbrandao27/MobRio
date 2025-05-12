@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { busLivePositions } from '../api/webService';
+import BusMap from '../components/BusMap';
+import type { LivePosition } from '../types/bus';
 
 function LivePosition() {
-  const [positions, setPositions] = useState<any[]>([]);
+  const [positions, setPositions] = useState<LivePosition[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPositions = async () => {
@@ -35,28 +37,35 @@ function LivePosition() {
       ) : positions.length === 0 ? (
         <p>Nenhum dado disponível.</p>
       ) : (
-        <table className="bus-table">
-          <thead>
-            <tr>
-              <th>Linha</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-              <th>Velocidade (km/h)</th>
-              <th>Tempo Chegada</th>
-            </tr>
-          </thead>
-          <tbody>
-            {positions.map((pos, index) => (
-              <tr key={index}>
-                <td>{pos.route_name}</td>
-                <td>{pos.latitude}</td>
-                <td>{pos.longitude}</td>
-                <td>{pos.velocity}</td>
-                <td>{pos.tempo_chegada}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <div style={{ width: '40%' }}>
+            <table className="bus-table">
+              <thead>
+                <tr>
+                  <th>Linha</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>Velocidade (km/h)</th>
+                  <th>Tempo Chegada</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((pos, index) => (
+                  <tr key={index}>
+                    <td>{pos.route_name}</td>
+                    <td>{pos.latitude}</td>
+                    <td>{pos.longitude}</td>
+                    <td>{pos.velocity}</td>
+                    <td>{pos.tempo_chegada}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ width: '60%' }}>
+            <BusMap positions={positions} />
+          </div>
+        </div>
       )}
     </div>
   );

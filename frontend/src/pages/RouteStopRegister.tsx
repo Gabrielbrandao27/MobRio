@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { busRoutes, busStops, userBusRelation } from '../api/webService';
+import type { Route, Stop } from '../types/bus';
 
 function HomePage() {
-  const [routes, setRoutes] = useState([]);
+  const [routes, setRoutes] = useState<Route[]>([]);
   const [selectedRoute, setSelectedRoute] = useState('');
-  const [stops, setStops] = useState([]);
+  const [stops, setStops] = useState<Stop[]>([]);
   const [selectedStop, setSelectedStop] = useState('');
   const [openTime, setOpenTime] = useState('');
   const [closeTime, setCloseTime] = useState('');
@@ -61,7 +62,7 @@ function HomePage() {
             required
           >
             <option value="">Selecione</option>
-            {routes.map((route: any) => (
+            {routes.map((route: Route) => (
               <option key={route.route_id} value={route.route_id}>
                 {route.route_short_name} - {route.route_long_name}
               </option>
@@ -83,7 +84,7 @@ function HomePage() {
             required
           >
             <option value="">Selecione</option>
-            {stops.map((stop: any) => (
+            {stops.map((stop: Stop) => (
               <option key={stop.route_stop_id} value={stop.route_stop_id}>
                 {stop.stop_name}
               </option>

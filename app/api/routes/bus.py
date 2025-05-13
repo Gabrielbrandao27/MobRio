@@ -4,7 +4,7 @@ import redis
 from fastapi import APIRouter, Depends
 from app.crud.bus import Bus
 from app.dependencies.auth import get_current_user
-from app.utils.distance import calculate_eta
+from app.utils.travelTime import get_eta_from_traveltime
 
 router = APIRouter()
 r = redis.Redis(host='localhost', port=6379, db=0)
@@ -51,17 +51,21 @@ def get_live_positions(user: dict = Depends(get_current_user)):
         for item in bus_struct:
             route_name = item["linha"]
             if route_name in relations_dict:
-                lat = Decimal(item["latitude"].replace(",", "."))
-                lon = Decimal(item["longitude"].replace(",", "."))
+                bus_lat = float(item["latitude"].replace(",", "."))
+                bus_lon = float(item["longitude"].replace(",", "."))
                 velocity = int(item["velocidade"])
 
                 relation = relations_dict[route_name][0]
-                tempo_chegada = calculate_eta(lat, lon, relation["stop_lat"], relation["stop_lon"], velocity)
+                stop_lat = float(relation["stop_lat"])
+                stop_lon = float(relation["stop_lon"])
+
+                tempo_chegada = get_eta_from_traveltime(bus_lat, bus_lon, stop_lat, stop_lon)
+                print(f"Tempo de chegada: {tempo_chegada}")
 
                 live_positions.append({
                     "route_name": route_name,
-                    "latitude": lat,
-                    "longitude": lon,
+                    "latitude": bus_lat,
+                    "longitude": bus_lon,
                     "velocity": velocity,
                     "stop_name": relation["stop_name"],
                     "tempo_chegada": tempo_chegada

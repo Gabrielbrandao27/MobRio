@@ -46,7 +46,7 @@ function LivePosition() {
                   <th>Latitude</th>
                   <th>Longitude</th>
                   <th>Velocidade (km/h)</th>
-                  <th>Tempo Chegada</th>
+                  <th>Tempo Chegada (min)</th>
                 </tr>
               </thead>
               <tbody>

@@ -30,7 +30,7 @@ function BusMap({ positions }: { positions: LivePosition[] }) {
           <Popup>
             <strong>Linha:</strong> {pos.route_name} <br />
             <strong>Velocidade:</strong> {pos.velocity} km/h <br />
-            <strong>Próxima parada:</strong> {pos.stop_name} <br />
+            <strong>Sua parada:</strong> {pos.stop_name} <br />
             <strong>Tempo de chegada:</strong> {pos.tempo_chegada || 'N/D'}
           </Popup>
         </Marker>

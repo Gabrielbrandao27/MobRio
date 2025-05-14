@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import requests
 import os
 from dotenv import load_dotenv
@@ -10,7 +11,7 @@ TRAVELTIME_API_KEY = os.getenv("TRAVELTIME_API_KEY")
 
 def get_eta_from_traveltime(bus_lat: float, bus_lon: float, stop_lat: float, stop_lon: float, mode="driving"):
 
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("America/Sao_Paulo"))
 
     url = "https://api.traveltimeapp.com/v4/time-filter"
 

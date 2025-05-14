@@ -4,7 +4,7 @@ from utils.travel_time import get_eta_from_traveltime
 from crud.bus import Bus
 
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='redis', port=6379, db=0)
 
 
 def process_live_positions(user_id: int):

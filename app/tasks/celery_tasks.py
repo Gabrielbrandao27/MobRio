@@ -2,22 +2,24 @@ import json
 import redis
 import requests
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from db.db_manager import DBManager
 from core.celery_worker import app
 from utils.process_positions import process_live_positions
 from utils.send_email import send_email
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='redis', port=6379, db=0)
 
 @app.task
 def fetch_buses_every_minute():
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("America/Sao_Paulo"))
     open_time = (now - timedelta(minutes=1)).strftime("%Y-%m-%d+%H:%M:%S")
     close_time = now.strftime("%Y-%m-%d+%H:%M:%S")
 
     url = f"https://dados.mobilidade.rio/gps/sppo?dataInicial={open_time}&dataFinal={close_time}"
 
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
         r.set('bus_struct', json.dumps(data))
@@ -51,7 +53,7 @@ def notify_users_about_bus():
 
             # Verificar se algum ônibus está a 10 minutos ou menos do horário de abertura do usuário
             for position in live_positions:
-                now = datetime.now()
+                now = datetime.now(ZoneInfo("America/Sao_Paulo"))
                 arrival_time = now + timedelta(minutes=position["tempo_chegada"])
 
                 # Converter hora_abertura e hora_fechamento para objetos datetime.time, se necessário

@@ -3,7 +3,7 @@ from datetime import timedelta
 
 app = Celery(
     "worker",
-    broker="amqp://guest:guest@localhost:5672//",
+    broker="amqp://guest:guest@rabbitmq:5672//",
     backend="rpc://"
 )
 
@@ -17,6 +17,8 @@ app.conf.beat_schedule = {
         'schedule': timedelta(minutes=1)
     },
 }
+
+app.conf.beat_schedule_filename = "/tmp/celerybeat-schedule"
 
 # Importa as tasks para que o worker conheça
 import tasks.celery_tasks as celery_tasks

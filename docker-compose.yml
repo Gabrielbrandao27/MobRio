@@ -45,7 +45,7 @@ services:
   celery:
     build:
       context: ./app
-    command: celery -A app.core.celery_worker.celery worker --beat --loglevel=info
+    command: celery -A core.celery_worker.app worker --beat --loglevel=info
     env_file:
       - .env
     working_dir: /app

@@ -28,6 +28,39 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+  backend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: mobrio_backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - rabbitmq
+      - redis
+  celery:
+    build:
+      context: ./app
+    command: celery -A app.core.celery_worker.celery worker --beat --loglevel=info
+    env_file:
+      - .env
+    working_dir: /app
+    depends_on:
+      - backend
+      - redis
+      - rabbitmq
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
 
 
 volumes:

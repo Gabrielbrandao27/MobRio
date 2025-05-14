@@ -4,7 +4,7 @@ import { busLivePositions } from '../api/webService';
 import BusMap from '../components/BusMap';
 import type { LivePosition } from '../types/bus';
 
-function LivePosition() {
+function HomePage() {
   const [positions, setPositions] = useState<LivePosition[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -71,4 +71,4 @@ function LivePosition() {
   );
 }
 
-export default LivePosition;
+export default HomePage;

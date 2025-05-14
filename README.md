@@ -22,6 +22,22 @@ Construir um web app que se alimenta minuto a minuto das posições dos ônibus 
 
 # Instruções para compilação
 
-1. cd frontend -> npm run dev
-2. cd app -> fastapi dev main.py
-3. celery -A app.core.celery_worker.app worker --beat --loglevel=info
+### Requisitos
+- Docker + Docker Compose
+
+```bash
+# clone o repositório
+git clone https://github.com/Gabrielbrandao27/MobRio.git
+cd MobRio
+
+# crie o arquivo .env baseado no .env.example
+cp .env.example .env
+
+# suba os containers
+docker-compose up --build
+```
+
+### Para execução local:
+1. `cd frontend -> npm run dev`
+2. `cd app -> fastapi dev main.py`
+3. `celery -A app.core.celery_worker.app worker --beat --loglevel=info`

@@ -1,7 +1,7 @@
 import json
 import redis
-from app.utils.travel_time import get_eta_from_traveltime
-from app.crud.bus import Bus
+from utils.travel_time import get_eta_from_traveltime
+from crud.bus import Bus
 
 
 r = redis.Redis(host='localhost', port=6379, db=0)

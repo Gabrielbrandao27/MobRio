@@ -2,10 +2,10 @@ import json
 import redis
 import requests
 from datetime import datetime, timedelta
-from app.db.db_manager import DBManager
-from app.core.celery_worker import app
-from app.utils.process_positions import process_live_positions
-from app.utils.send_email import send_email
+from db.db_manager import DBManager
+from core.celery_worker import app
+from utils.process_positions import process_live_positions
+from utils.send_email import send_email
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 

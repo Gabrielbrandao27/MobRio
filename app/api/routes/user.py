@@ -1,9 +1,9 @@
 import os
 from fastapi import APIRouter, Depends
-from app.schemas.user import UserCreate, UserLogin, UserBusRelation
-from app.crud.user import User
-from app.core.security import create_access_token
-from app.dependencies.auth import admin_required, get_current_user
+from schemas.user import UserCreate, UserLogin, UserBusRelation
+from crud.user import User
+from core.security import create_access_token
+from dependencies.auth import admin_required, get_current_user
 
 
 router = APIRouter()

@@ -20,4 +20,6 @@ export interface LivePosition {
   velocity: number;
   stop_name: string;
   tempo_chegada: string;
+  hora_abertura: string;
+  hora_fechamento: string;
 }

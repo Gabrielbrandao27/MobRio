@@ -12,6 +12,10 @@ app.conf.beat_schedule = {
         'task': 'app.tasks.celery_tasks.fetch_buses_every_minute',
         'schedule': timedelta(minutes=1)
     },
+    'notify-users-about-bus-every-minute': {
+        'task': 'app.tasks.celery_tasks.notify_users_about_bus',
+        'schedule': timedelta(minutes=1)
+    },
 }
 
 # Importa as tasks para que o worker conheça

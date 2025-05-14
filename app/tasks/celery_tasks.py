@@ -49,15 +49,26 @@ def notify_users_about_bus():
 
             live_positions = result["live_positions"]
 
-            # Verificar se algum ônibus está a 10 minutos ou menos
+            # Verificar se algum ônibus está a 10 minutos ou menos do horário de abertura do usuário
             for position in live_positions:
-                if position["tempo_chegada"] <= 10:
-                    send_email(
-                        to=user_email,
-                        subject="Seu ônibus está chegando!",
-                        body=f"O ônibus da linha {position['route_name']} está a {position['tempo_chegada']} minutos do seu ponto {position['stop_name']}."
-                    )
-                    print(f"E-mail enviado para {user_email} sobre a linha {position['route_name']}.")
+                now = datetime.now()
+                arrival_time = now + timedelta(minutes=position["tempo_chegada"])
+
+                # Converter hora_abertura e hora_fechamento para objetos datetime.time, se necessário
+                hora_abertura = datetime.strptime(position["hora_abertura"], "%H:%M:%S").time() if isinstance(position["hora_abertura"], str) else position["hora_abertura"]
+                hora_fechamento = datetime.strptime(position["hora_fechamento"], "%H:%M:%S").time() if isinstance(position["hora_fechamento"], str) else position["hora_fechamento"]
+
+                # Verificar se o horário de chegada está dentro do intervalo definido pelo usuário
+                if hora_abertura <= arrival_time.time() <= hora_fechamento:
+                    # Verificar se o ônibus está a 10 minutos ou menos da parada
+                    if timedelta(minutes=position["tempo_chegada"]) <= timedelta(minutes=10):
+                        # Enviar e-mail para o usuário
+                        send_email(
+                            to=user_email,
+                            subject="Seu ônibus está chegando!",
+                            body=f"O ônibus da linha {position['route_name']} está a {position['tempo_chegada']} minutos do seu ponto {position['stop_name']}."
+                        )
+                        print(f"E-mail enviado para {user_email} sobre a linha {position['route_name']}.")
     except Exception as e:
         print(f"Erro na task notify_users_about_bus: {e}")
 

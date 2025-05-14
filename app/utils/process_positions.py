@@ -43,7 +43,9 @@ def process_live_positions(user_id: int):
                 "longitude": bus_lon,
                 "velocity": velocity,
                 "stop_name": relation["stop_name"],
-                "tempo_chegada": tempo_chegada
+                "tempo_chegada": tempo_chegada,
+                "hora_abertura": relation["open_time"],
+                "hora_fechamento": relation["close_time"],
             })
 
     return {"live_positions": live_positions}

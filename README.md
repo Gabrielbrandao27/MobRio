@@ -18,3 +18,10 @@ Construir um web app que se alimenta minuto a minuto das posições dos ônibus 
 1. Para calculo de tempo de viagem estimado: traveltime.com ou similar
 2. Para renderizar o mapa: https://leafletjs.com/
 3. API de posicionamento dos ônibus do Rio de Janeiro: https://dados.mobilidade.rio/gps/sppo?dataInicial=2024-01-29+15:40:00&dataFinal=2024-01-29+15:43:00
+
+
+# Instruções para compilação
+
+1. cd frontend -> npm run dev
+2. cd app -> fastapi dev main.py
+3. celery -A app.core.celery_worker.app worker --beat --loglevel=info

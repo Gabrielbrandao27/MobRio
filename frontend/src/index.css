@@ -1,0 +1,36 @@
+@import "leaflet/dist/leaflet.css";
+
+.landing-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.landing-container button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.bus-table {
+  width: 40%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.bus-table th, .bus-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.bus-table th {
+  background-color: #f2f2f2;
+}
+
+.bus-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.bus-table tr:hover {
+  background-color: #f1f1f1;
+}

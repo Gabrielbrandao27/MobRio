@@ -54,11 +54,13 @@ def notify_users_about_bus():
             # Verificar se algum ônibus está a 10 minutos ou menos do horário de abertura do usuário
             for position in live_positions:
                 now = datetime.now(ZoneInfo("America/Sao_Paulo"))
+                if "tempo_chegada" not in position or position["tempo_chegada"] is None:
+                    continue
                 arrival_time = now + timedelta(minutes=position["tempo_chegada"])
 
                 # Converter hora_abertura e hora_fechamento para objetos datetime.time, se necessário
-                hora_abertura = datetime.strptime(position["hora_abertura"], "%H:%M:%S").time() if isinstance(position["hora_abertura"], str) else position["hora_abertura"]
-                hora_fechamento = datetime.strptime(position["hora_fechamento"], "%H:%M:%S").time() if isinstance(position["hora_fechamento"], str) else position["hora_fechamento"]
+                hora_abertura = datetime.strptime(position["hora_abertura"].split(".")[0], "%H:%M:%S").time() if isinstance(position["hora_abertura"], str) else position["hora_abertura"]
+                hora_fechamento = datetime.strptime(position["hora_fechamento"].split(".")[0], "%H:%M:%S").time() if isinstance(position["hora_fechamento"], str) else position["hora_fechamento"]
 
                 # Verificar se o horário de chegada está dentro do intervalo definido pelo usuário
                 if hora_abertura <= arrival_time.time() <= hora_fechamento:

@@ -10,16 +10,6 @@ export const landingPage = async () => {
   }
 };
 
-export const homePage = async () => {
-  try {
-    const response = await axiosInstance.get(`/home`);
-    return response.data;
-  } catch (error) {
-    console.error("Error on home page:", error);
-    throw error;
-  }
-};
-
 export const registerPage = async (
   name: string,
   password: string,

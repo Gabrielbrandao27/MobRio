@@ -35,7 +35,7 @@ cd MobRio
 cp .env.example .env
 
 # suba os containers
-docker-compose up --build
+docker compose up --build
 
 # acesse o site do MobRio através do link:
 http://localhost:4173/

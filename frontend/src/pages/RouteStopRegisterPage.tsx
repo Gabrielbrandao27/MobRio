@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { busRoutes, busStops, userBusRelation } from '../api/webService';
 import type { Route, Stop } from '../types/bus';
 
-function UserBusRelationPage() {
+function RouteStopRegisterPage() {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [selectedRoute, setSelectedRoute] = useState('');
   const [stops, setStops] = useState<Stop[]>([]);
@@ -114,4 +114,4 @@ function UserBusRelationPage() {
   );
 }
 
-export default UserBusRelationPage;
+export default RouteStopRegisterPage;

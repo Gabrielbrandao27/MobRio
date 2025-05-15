@@ -12,14 +12,3 @@ def landing_page():
             "register": "/register"
         }
     }
-
-@router.get("/home")
-def home(current_user: dict = Depends(get_current_user)):
-    return {"message": f"""
-            Bem-vindo(a) de volta, {current_user['name']}!
-
-            Escolha uma das linhas de ônibus disponíveis:
-            Escolha um ponto de ônibus:
-            Escolha um horário inicial:
-            Escolha um horário final:
-        """}

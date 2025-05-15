@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.api.routes import bus, main, user
-from app.db.db_manager import DBManager
+from api.routes import bus, main, user
+from db.db_manager import DBManager
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -14,7 +14,7 @@ app.include_router(user.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:4173", "http://127.0.0.1:4173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

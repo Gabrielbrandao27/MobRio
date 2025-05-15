@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import requests
 import os
 from dotenv import load_dotenv
@@ -10,7 +11,7 @@ TRAVELTIME_API_KEY = os.getenv("TRAVELTIME_API_KEY")
 
 def get_eta_from_traveltime(bus_lat: float, bus_lon: float, stop_lat: float, stop_lon: float, mode="driving"):
 
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("America/Sao_Paulo"))
 
     url = "https://api.traveltimeapp.com/v4/time-filter"
 
@@ -49,10 +50,14 @@ def get_eta_from_traveltime(bus_lat: float, bus_lon: float, stop_lat: float, sto
         response.raise_for_status()
         result = response.json()
 
-        travel_time_seconds = result["results"][0]["locations"][0]["properties"][0]["travel_time"]
-        travel_time_minutes = round((timedelta(seconds=travel_time_seconds).total_seconds() / 60), 2)
+        results = result.get("results", [])
+        if results and results[0].get("locations"):
+            travel_time_seconds = results[0]["locations"][0]["properties"][0]["travel_time"]
+            travel_time_minutes = round((timedelta(seconds=travel_time_seconds).total_seconds() / 60), 2)
+            return travel_time_minutes
+        else:
+            return None
 
-        return travel_time_minutes
     except Exception as e:
         print(f"Erro ao consultar TravelTime (NORMAL): {e}")
         print(f"Resposta completa: {response.text}")

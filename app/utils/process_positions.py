@@ -1,10 +1,10 @@
 import json
 import redis
-from app.utils.travel_time import get_eta_from_traveltime
-from app.crud.bus import Bus
+from utils.travel_time import get_eta_from_traveltime
+from crud.bus import Bus
 
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='redis', port=6379, db=0)
 
 
 def process_live_positions(user_id: int):
@@ -43,7 +43,9 @@ def process_live_positions(user_id: int):
                 "longitude": bus_lon,
                 "velocity": velocity,
                 "stop_name": relation["stop_name"],
-                "tempo_chegada": tempo_chegada
+                "tempo_chegada": tempo_chegada,
+                "hora_abertura": relation["open_time"],
+                "hora_fechamento": relation["close_time"],
             })
 
     return {"live_positions": live_positions}

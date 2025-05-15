@@ -9,7 +9,6 @@ TEMP_EMAIL = os.getenv("TEMP_EMAIL")
 TEMP_EMAIL_PASSWORD = os.getenv("TEMP_EMAIL_PASSWORD")
 
 def send_email(to, subject, body):
-    print(to, TEMP_EMAIL, TEMP_EMAIL_PASSWORD)
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
     sender_email = TEMP_EMAIL

@@ -1,11 +1,11 @@
 import redis
 from fastapi import APIRouter, Depends
-from app.crud.bus import Bus
-from app.dependencies.auth import get_current_user
-from app.utils.process_positions import process_live_positions
+from crud.bus import Bus
+from dependencies.auth import get_current_user
+from utils.process_positions import process_live_positions
 
 router = APIRouter()
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='redis', port=6379, db=0)
 
 @router.get("/bus/routes")
 def get_routes(_: dict = Depends(get_current_user)):

@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import RouteStopRegister from './pages/RouteStopRegister';
+import RouteStopRegisterPage from './pages/RouteStopRegisterPage';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
       {/* Rotas com Navbar */}
       <Route element={<NavbarLayout />}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/route-stop-register" element={<RouteStopRegister />} />
+        <Route path="/route-stop-register" element={<RouteStopRegisterPage />} />
       </Route>
     </Routes>
   );

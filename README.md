@@ -20,11 +20,11 @@ Construir um web app que se alimenta minuto a minuto das posições dos ônibus 
 3. API de posicionamento dos ônibus do Rio de Janeiro: https://dados.mobilidade.rio/gps/sppo?dataInicial=2024-01-29+15:40:00&dataFinal=2024-01-29+15:43:00
 
 
-# Instruções para compilação
+# Instruções para Compilação
 
 
 ### Requisitos
-- Docker + Docker Compose
+- Docker
 
 ```bash
 # clone o repositório
@@ -45,3 +45,13 @@ http://localhost:4173/
 1. `cd frontend -> npm run dev`
 2. `cd app -> fastapi dev main.py`
 3. `celery -A app.core.celery_worker.app worker --beat --loglevel=info`
+
+
+# Instruções de Navegação
+
+- Na Landing Page, se for o primeiro acesso, faça registro do seu usuário clicando em Registrar
+- Se estiver acessando novamente (e não reconstruiu o banco de dados), faça Login
+- Na Home Page serão exibidos os ônibus cadastrados em tempo real junto com algumas informações
+- Se ainda não tiver cadastrado nenhum ônibus, faça o cadastrado clicando em Cadastro de Ônibus
+- Na página de Cadastro de Ônibus deverá escolher a Linha, o Ponto e uma janela de horário de sua preferência
+- Se algum ônibus estiver a 10 minutos ou menos de chegar no seu ponto cadastrado dentro ja janela que escolheu, você receberá um e-mail

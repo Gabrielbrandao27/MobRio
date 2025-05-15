@@ -30,11 +30,14 @@ Construir um web app que se alimenta minuto a minuto das posições dos ônibus 
 git clone https://github.com/Gabrielbrandao27/MobRio.git
 cd MobRio
 
-# crie o arquivo .env baseado no .env.example
+# crie o arquivo .env baseado no .env.example e modifique com seus valores
 cp .env.example .env
 
 # suba os containers
 docker-compose up --build
+
+# acesse o site do MobRio através do link:
+http://localhost:4173/
 ```
 
 ### Para execução local:
